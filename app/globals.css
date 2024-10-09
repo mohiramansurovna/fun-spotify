@@ -2,26 +2,153 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .absolute-center {
+    @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform;
   }
+}
+
+.dual-border-button {
+  position: relative;
+}
+.dual-border-button::before,
+.dual-border-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: inherit;
+  border: 2px solid transparent;
+  pointer-events: none;
+}
+
+.dual-border-button::before {
+  top: -1.5px;
+  left: -0.4px;
+  border-top-color: #61e686;
+  border-left-color: #61e686;
+  clip-path: polygon(0 0, 75% 0, 75% 50%, 0 50%);
+  animation: borderAnimateBefore 2s infinite forwards ease-in-out;
+}
+
+.dual-border-button::after {
+  right: -1px;
+  bottom: -2px;
+  border-bottom-color: #14c5a8;
+  border-right-color: rgb(20, 197, 168);
+  clip-path: polygon(25% 50%, 100% 50%, 100% 100%, 25% 100%);
+  animation: borderAnimateAfter 2s infinite forwards ease-in-out;
+}
+
+@keyframes borderAnimateBefore {
+  0% {
+    clip-path: polygon(0 0, 75% 0, 75% 50%, 0 50%);
+    border-top-color: #61e686;
+    border-left-color: #61e686;
+  }
+  25% {
+    clip-path: polygon(50% 0%, 100% 0%, 100% 75%, 75% 75%);
+    border-top-color: #61e686;
+    border-right-color: #61e686;
+  }
+  50% {
+    clip-path: polygon(25% 50%, 100% 50%, 100% 100%, 25% 100%);
+    border-bottom-color: #61e686;
+    border-right-color: #61e686;
+  }
+  75% {
+    clip-path: polygon(0% 25%, 50% 25%, 50% 100%, 0% 100%);
+    border-bottom-color: #61e686;
+    border-left-color: #61e686;
+  }
+  100% {
+    clip-path: polygon(0% 0%, 75% 0%, 75% 50%, 0% 50%);
+    border-top-color: #61e686;
+    border-left-color: #61e686;
+  }
+}
+@keyframes borderAnimateAfter {
+  0% {
+    border-bottom-color: rgb(20, 197, 168);
+    border-right-color: rgb(20, 197, 168);
+    clip-path: polygon(25% 50%, 100% 50%, 100% 100%, 25% 100%);
+  }
+  25% {
+    clip-path: polygon(0% 25%, 50% 25%, 50% 100%, 0% 100%);
+    border-bottom-color: rgb(20, 197, 168);
+    border-left-color: rgb(20, 197, 168);
+  }
+  50% {
+    clip-path: polygon(0% 0%, 75% 0%, 75% 25%, 0% 25%);
+    border-top-color: rgb(20, 197, 168);
+    border-left-color: rgb(20, 197, 168);
+  }
+  75% {
+    clip-path: polygon(50% 0%, 100% 0%, 100% 75%, 75% 75%);
+    border-top-color: rgb(20, 197, 168);
+    border-right-color: rgb(20, 197, 168);
+  }
+  100% {
+    clip-path: polygon(25% 50%, 100% 50%, 100% 100%, 25% 100%);
+    border-bottom-color: rgb(20, 197, 168);
+    border-right-color: rgb(20, 197, 168);
+  }
+}
+.footer-elem::after {
+  content: "";
+  position: absolute;
+  width: initial;
+  height: 1.25em;
+  top: 0px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border: 2px solid transparent;
+  pointer-events: none;
+  border-bottom-color: #000;
+  animation: hover-out 0.3s forwards;
+}
+.footer-elem:hover::after {
+  animation: hover-in 0.3s forwards;
+}
+@keyframes hover-out {
+  0% {
+    left: 0px;
+    right: 0px;
+  }
+  75% {
+    left: 0px;
+    right: 44px;
+  }
+  100% {
+    left: 0px;
+    right: 44px;
+    opacity: 0;
+  }
+}
+@keyframes hover-in {
+  0% {
+    left: 0px;
+    right: 44px;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    left: 0px;
+    right: 0px;
+    opacity: 1;
+  }
+}
+.youtubePlayer::after {
+  content: "";
+  position: absolute;
+  width: 820px;
+  top: 0;
+  left:0;
+  height: 520px;
+  box-shadow: inset 0px 0px 10px 80px #b9f1ca;
+  pointer-events: none;
 }

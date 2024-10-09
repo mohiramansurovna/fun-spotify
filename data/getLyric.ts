@@ -1,0 +1,1 @@
+//input is raw lyric from lib checkHasLyric, output is 6 or 7 line of lyric

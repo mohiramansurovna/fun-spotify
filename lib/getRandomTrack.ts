@@ -1,0 +1,1 @@
+//no input, output is random fav song

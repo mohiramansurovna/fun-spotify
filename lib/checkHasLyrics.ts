@@ -1,0 +1,1 @@
+//has lyrics returns null if no lyrics is found, or returns lyrics as {lyrics:''}

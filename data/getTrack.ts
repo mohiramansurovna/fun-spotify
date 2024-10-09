@@ -1,0 +1,1 @@
+//uses getRandomTracks and checkHasLyrics, if so returns full track
