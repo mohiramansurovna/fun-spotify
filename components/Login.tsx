@@ -13,7 +13,7 @@ import facebookHover from "@/assets/Facebook-hover.svg";
 import skyMusic from '@/assets/SkyMusic.svg';
 import Image from "next/image";
 
-const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=9244b5dc8ff043b49e7345e330f6de7c&response_type=code&redirect_uri=http://${process.env.REDIRECT_URI}/&scope=streaming%20user-read-email%20user-read-private%20user-top-read%20user-library-read%20user-library-modify%20playlist-read-private%20playlist-modify-public%20playlist-modify-private`;
+const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=9244b5dc8ff043b49e7345e330f6de7c&response_type=code&redirect_uri=${process.env.REDIRECT_URI}&scope=streaming%20user-read-email%20user-read-private%20user-top-read%20user-library-read%20user-library-modify%20playlist-read-private%20playlist-modify-public%20playlist-modify-private`;
 
 export default function Login() {
     
