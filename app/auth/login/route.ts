@@ -1,18 +1,27 @@
+/**
+ * This route will be called only in useAuth, it gets the code and,
+ * returns success:{accessToken, refreshToken, expiresIn} or
+ * returns error:'Authorization failed'
+ */
+
 import {NextRequest, NextResponse} from 'next/server';
 import SpotifyWebApi from 'spotify-web-api-node';
 
-const spotifyAPI = new SpotifyWebApi({
-    redirectUri: process.env.REDIRECT_URI,
-    clientId: '9244b5dc8ff043b49e7345e330f6de7c',
-    clientSecret: '1a5638fad76b4dd58b9e5b677d4c61e1',
-});
-
 export async function POST(req: NextRequest) {
+    //code from useAuth
     const {code} = await req.json();
-
     if (!code) {
         return NextResponse.json({error: 'Authorized code is not provided'}, {status: 400});
     }
+
+    //creats instance of spotifyWebAPI
+    const spotifyAPI = new SpotifyWebApi({
+        redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URI,
+        clientId: process.env.NEXT_PUBLIC_CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+    });
+
+    //gets accessToken from spotifyApi using code
     try {
         const data = await spotifyAPI.authorizationCodeGrant(code);
         return NextResponse.json(
@@ -26,7 +35,7 @@ export async function POST(req: NextRequest) {
             {status: 200}
         );
     } catch (error) {
-        console.error('Error during authorizationCodeGrant:', error);
+        console.log('ERROR During authoration grand code: ', error)
         return NextResponse.json({error: 'Authorization failed'}, {status: 400});
     }
 }

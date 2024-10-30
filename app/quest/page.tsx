@@ -1,6 +1,4 @@
-import Quest from '@/components/Quest'
-import React from 'react'
-
+import Quest from '@/components/Quest';
 export default function page() {
-  return <Quest/>
+    return <Quest />;
 }

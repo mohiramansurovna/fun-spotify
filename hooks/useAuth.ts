@@ -1,20 +1,13 @@
 'use client';
-import {login} from '@/actions/login';
-import {refresh} from '@/actions/refresh';
+import { useRouter } from 'next/navigation';
 import {useEffect, useState} from 'react';
-type ResType = {
-    success?: {
-        accessToken: string;
-        refreshToken?: string;
-        expiresIn: number;
-    };
-    error?: string;
-};
 export default function useAuth(code: string) {
+    const router=useRouter();
     const [accessToken, setAccessToken] = useState<string>();
     const [refreshToken, setRefreshToken] = useState<string>();
     const [expiresIn, setExpiresIn] = useState<number>();
-    const logInAction = async () => {
+
+    const logIn = async () => {
         const res = await fetch('/auth/login', {
             method: 'POST',
             headers: {
@@ -22,38 +15,49 @@ export default function useAuth(code: string) {
             },
             body: JSON.stringify({code}),
         });
-        const data = await res.json();
-
-        if (data.success) {
-            setAccessToken(data.success.accessToken);
-            setRefreshToken(data.success.refreshToken);
-            setExpiresIn(data.success.expiresIn);
-        }
-        if (data.error) {
-            console.log(data.error);
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success) {
+                setAccessToken(data.success.accessToken);
+                setRefreshToken(data.success.refreshToken);
+                setExpiresIn(data.success.expiresIn);
+            }
+            if (data.error) {
+                console.log('DATA ERROR IN USEAUTH: ', data.error);
+            }
+        } else {
+            router.replace('/')
         }
     };
     useEffect(() => {
-        logInAction();
+        logIn();
     }, [code]);
 
-    const refreshAction = () => {
-        if (!refreshToken || !expiresIn) return;
-        const timeout = setInterval(() => {
-            refresh(refreshToken)
-                .then((res: ResType) => {
-                    setAccessToken(res.success?.accessToken);
-                    setExpiresIn(res.success?.expiresIn);
-                })
-                .catch(() => {
-                    window.location.assign('/');
+    const refresh = () => {
+        if (refreshToken && expiresIn) {
+            const timeout = setInterval(async () => {
+                const res = await fetch('/auth/refresh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({refreshToken}),
                 });
-        }, (expiresIn - 60) * 1000);
-        return () => clearInterval(timeout);
+                const data = await res.json();
+                if (data.success) {
+                    setAccessToken(data.success?.accessToken);
+                    setExpiresIn(data.success?.expiresIn);
+                }
+                if (data.error) {
+                    console.log(data.error);
+                }
+            }, (expiresIn - 60) * 1000);
+            return () => clearInterval(timeout);
+        }
     };
 
     useEffect(() => {
-        refreshAction();
+        refresh();
     }, [refreshToken, expiresIn]);
 
     return accessToken;
